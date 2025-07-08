@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>大尺寸 Flashcard 发音练习</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      margin-top: 20px;
+    }
+
+    .mode {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #444;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      margin: 20px;
+    }
+
+    .card {
+      width: 80vw;
+      height: 50vh;
+      max-width: 800px;
+      max-height: 500px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      font-size: 40px;
+      cursor: pointer;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      border-radius: 20px;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      box-sizing: border-box;
+    }
+
+    .front {
+      background-color: #ffffff;
+    }
+
+    .back {
+      background-color: #d0f0d8;
+      transform: rotateY(180deg);
+    }
+
+    .button-group {
+      margin: 20px;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📚 英语发音 Flashcard</h1>
+  <div class="mode">当前模式：<span id="modeLabel">英文→中文</span></div>
+
+  <div class="card-container">
+    <div class="card" id="card" onclick="flipCard()">
+      <div class="card-inner">
+        <div class="card-face front" id="cardFront">正面</div>
+        <div class="card-face back" id="cardBack">背面</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button onclick="showNextCard()">🎲 下一张</button>
+    <button onclick="toggleMode()">🔁 切换模式</button>
+  </div>
+
+  <script>
+    const flashcards = [
+      { word: "dad", phonetic: "/dæd/", meaning: "爸爸" },
+      { word: "bad", phonetic: "/bæd/", meaning: "坏的" },
+      { word: "fat", phonetic: "/fæt/", meaning: "胖的" },
+      { word: "rat", phonetic: "/ræt/", meaning: "老鼠" },
+      { word: "cat", phonetic: "/kæt/", meaning: "猫" },
+      { word: "map", phonetic: "/mæp/", meaning: "地图" },
+      { word: "wake", phonetic: "/weɪk/", meaning: "醒来" },
+      { word: "late", phonetic: "/leɪt/", meaning: "迟到的" },
+      { word: "cake", phonetic: "/keɪk/", meaning: "蛋糕" },
+      { word: "take", phonetic: "/teɪk/", meaning: "拿取" },
+      { word: "skate", phonetic: "/skeɪt/", meaning: "滑冰" }
+    ];
+
+    let englishFirst = true;
+
+    function showNextCard() {
+      const card = flashcards[Math.floor(Math.random() * flashcards.length)];
+      if (englishFirst) {
+        document.getElementById("cardFront").innerHTML = card.word;
+        document.getElementById("cardBack").innerHTML = `${card.phonetic}<br>${card.meaning}`;
+        document.getElementById("modeLabel").textContent = "英文→中文";
+      } else {
+        document.getElementById("cardFront").innerHTML = card.meaning;
+        document.getElementById("cardBack").innerHTML = `${card.word}<br>${card.phonetic}`;
+        document.getElementById("modeLabel").textContent = "中文→英文";
+      }
+      document.getElementById("card").classList.remove("flipped");
+    }
+
+    function flipCard() {
+      document.getElementById("card").classList.toggle("flipped");
+    }
+
+    function toggleMode() {
+      englishFirst = !englishFirst;
+      showNextCard();
+    }
+
+    window.onload = showNextCard;
+  </script>
+
+</body>
+</html>
